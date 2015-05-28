@@ -13,6 +13,23 @@
 		<protocol>raw</protocol>
 	</settings>
 	<functions>
+local decompressScript = [[
+decompress_lzo_file() {
+	SRC_FILE=/etc/cmh-ludl/$1.lzo
+	DEST_FILE=/etc/cmh-ludl/$1
+	if [ ! -e $DEST_FILE -o $SRC_FILE -nt $DEST_FILE ]
+	then
+		TEMP_FILE=$(mktemp)
+		pluto-lzo d $SRC_FILE $TEMP_FILE
+		mv $TEMP_FILE $DEST_FILE
+	fi
+}
+]]
+os.execute(decompressScript .. "decompress_lzo_file L_SmartSwitch_core.lua")
+os.execute(decompressScript .. "decompress_lzo_file L_SmartSwitch_dkjson.lua")
+os.execute(decompressScript .. "decompress_lzo_file L_SmartSwitch_log.lua")
+os.execute(decompressScript .. "decompress_lzo_file L_SmartSwitch_util.lua")
+
 		g_pluginName = "SmartSwitch"
 		g_core = require("L_" .. g_pluginName .. "_" .. "core")
 
@@ -25,77 +42,74 @@
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitch1</serviceId>
 			<name>AddSwitch</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitch1", "AddSwitch")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitch1", "AddSwitch")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitch1</serviceId>
 			<name>RemoveSwitch</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitch1", "RemoveSwitch")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitch1", "RemoveSwitch")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>SetLevel</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1", "SetLevel")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "SetLevel")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>AddSensor</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1", "AddSensor")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "AddSensor")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>RemoveSensor</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1",
-				"RemoveSensor")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "RemoveSensor")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>SetOnLevel</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1", "SetOnLevel")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "SetOnLevel")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>SetOffLevel</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1", "SetOffLevel")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "SetOffLevel")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>SetAutoTimeout</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1",
-				"SetAutoTimeout")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "SetAutoTimeout")
+				return 4, nil
+			</job>
 		</action>
 		<action>
 			<serviceId>urn:hugheaves-com:serviceId:SmartSwitchController1</serviceId>
 			<name>SetManualTimeout</name>
-			<run>
-				return g_core.dispatchRun(lul_device, lul_settings,
-				"urn:hugheaves-com:serviceId:SmartSwitchController1",
-				"SetManualTimeout")
-			</run>
+			<job>
+				g_core.dispatchRun(lul_device, lul_settings, "urn:hugheaves-com:serviceId:SmartSwitchController1", "SetManualTimeout")
+				return 4, nil
+			</job>
 		</action>
 	</actionList>
 </implementation>

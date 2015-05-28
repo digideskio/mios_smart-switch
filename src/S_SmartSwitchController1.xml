@@ -73,6 +73,11 @@
 			<sendEventsAttribute>yes</sendEventsAttribute>
 			<dataType>boolean</dataType>
 		</stateVariable>
+		<stateVariable>
+			<name>StatusText</name>
+			<sendEventsAttribute>yes</sendEventsAttribute>
+			<dataType>string</dataType>
+		</stateVariable>
 	</serviceStateTable>
 	<actionList>
 		<action>

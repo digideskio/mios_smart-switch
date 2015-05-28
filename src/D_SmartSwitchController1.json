@@ -1,5 +1,5 @@
 {
-    "flashicon":"http://www.hugheaves.com/vera/resources/smart-switch/1.2/smart-switch-icon-50x50.png",
+    "default_icon": "http://www.hugheaves.com/vera/resources/smart-switch/1.2/smart-switch-icon-50x50.png",
     "x":"6",
     "y":"12",
     "inScene":"1",
@@ -19,103 +19,32 @@
             },
             "Position":"0",
             "TabType":"flash",
+			"TopNavigationTab": 1,
             "SceneGroup":[
                 {
-                    "id":2,
-                    "top":0.75,
-                    "left":0,
-                    "x":6,
-                    "y":2
-                },
-                {
-                    "id":3,
-                    "top":3.75,
-                    "left":0,
-                    "x":6,
-                    "y":2
-                },
-                {
-                    "id":4,
-                    "top":6.75,
-                    "left":0,
-                    "x":6,
-                    "y":2
-                },
-                {
-                    "id":5,
-                    "top":9.75,
-                    "left":0,
-                    "x":6,
-                    "y":2
-                },
-                {
-                    "id":6,
-                    "top":0,
-                    "left":0,
-                    "x":6,
-                    "y":1
-                },
-                {
-                    "id":7,
-                    "top":3,
-                    "left":0,
-                    "x":6,
-                    "y":1
-                },
-                {
-                    "id":8,
-                    "top":6,
-                    "left":0,
-                    "x":6,
-                    "y":1
-                },
-                {
-                    "id":9,
-                    "top":9,
-                    "left":0,
-                    "x":6,
-                    "y":1
-                }
+					"id": 1
+				}
             ],
             "ControlGroup":[
                 {
-                    "id":2,
-                    "scenegroup":2,
-                    "isSingle":1
-                },
-                {
-                    "id":3,
-                    "scenegroup":3,
-                    "isSingle":1
-                },
-                {
-                    "id":4,
-                    "scenegroup":4,
-                    "isSingle":1
-                },
-                {
-                    "id":5,
-                    "scenegroup":5,
-                    "isSingle":1
-                },
-                {
-                    "id":6,
-                    "scenegroup":6
-                },
-                {
-                    "id":7,
-                    "scenegroup":7
-                },
-                {
-                    "id":8,
-                    "scenegroup":8
-                },
-                {
-                    "id":9,
-                    "scenegroup":9
-                }
+					"id": 1,
+					"scenegroup": 1
+				}
             ],
             "Control":[
+				{
+					"ControlGroup": 1,
+					"ControlType": "variable",
+					"text_align": "left",
+					"Display": {
+						"Service": "urn:hugheaves-com:serviceId:SmartSwitchController1",
+						"Variable": "StatusText",
+						"Top": 300,
+						"Left": 20,
+						"Width": 300,
+						"Height": 80
+					}
+				},
                 {
                     "ControlGroup":"6",
                     "ControlType":"label",

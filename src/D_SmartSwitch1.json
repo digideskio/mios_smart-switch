@@ -1,5 +1,5 @@
 {
-    "flashicon":"http://www.hugheaves.com/vera/resources/smart-switch/1.2/smart-switch-icon-50x50.png",
+    "default_icon":"http://www.hugheaves.com/vera/resources/smart-switch/1.2/smart-switch-icon-50x50.png",
     "inScene":"0",
     "DisplayStatus":{
         
@@ -76,6 +76,7 @@
                 "text": "Settings"
             },
             "Position": "1",
+            "TopNavigationTab": "1",
             "TabType": "javascript",
             "ScriptName": "J_SmartSwitch1.js",
             "Function": "ss_showSettings"

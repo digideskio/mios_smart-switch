@@ -110,6 +110,66 @@ g_taskHandle = -1
 -- FUNCTIONS
 ----------------------------------------------------
 
+local getFormattedLevel = function (level)
+	if (level == 0) then
+		return "Off"
+	elseif (level == 100) then
+		return "On"
+	end
+	return tostring(level) .. "%"
+end
+
+local getFormattedTimeout = function (timeout)
+	local hours = math.floor(timeout / 3600)
+	local hoursRemainder = timeout % 3600
+	if (hours > 0) then
+		return tostring(hours) .. "h"
+	end
+	local minutes = math.floor(hoursRemainder / 60)
+	local minutesRemainder = hoursRemainder % 60
+	if (minutes > 0) then
+		return tostring(minutes) .. "m"
+	end
+	local secondes = math.floor(minutesRemainder / 60)
+	return tostring(secondes) .. "s"
+end
+
+-- Shows Smartswitch Controller status on UI
+local function showStatusOnUI (smartSwitchId)
+	local statusText = '<div style="color:gray;font-size:.7em;text-align:left;">'
+
+	-- Levels
+	local onLevel       = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "OnLevel", smartSwitchId, util.T_NUMBER)
+	local offLevel      = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "OffLevel", smartSwitchId, util.T_NUMBER)
+	statusText = statusText .. "<div>Levels: On/<b>" .. getFormattedLevel(onLevel) .. "</b> Off/<b>" .. getFormattedLevel(offLevel) .. "</b></div>"
+
+	-- Timeouts
+	local autoTimeout   = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "AutoTimeout", smartSwitchId, util.T_NUMBER)
+	local manualTimeout = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "ManualTimeout", smartSwitchId, util.T_NUMBER)
+	statusText = statusText .. "<div>Timeouts: Auto/<b>" .. getFormattedTimeout(autoTimeout) .. "</b> Manual/<b>" .. getFormattedTimeout(manualTimeout) .. "</b></div>"
+
+	-- Current status
+	statusText = statusText .. "<div>Mode: "
+	local currentMode    = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "Mode", smartSwitchId, util.T_STRING)
+	local currentLevel   = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "Level", smartSwitchId, util.T_NUMBER)
+	local currentTimeout = util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "Timeout", smartSwitchId, util.T_NUMBER)
+	if (currentMode == MODE.MANUAL) then
+		statusText = statusText .. "<b><font color=\"red\">" .. currentMode .. "</font></b>"
+	else
+		statusText = statusText .. "<b>" .. currentMode .. "</b>"
+	end
+	if (currentMode ~= MODE.OFF) then
+		statusText = statusText .. " at <b>" .. tostring(currentLevel) .. "%</b>"
+		if (currentTimeout ~= FAR_FUTURE_TIME) then
+			statusText = statusText .. " until <b>" .. os.date('%H:%M:%S', currentTimeout) .. "</b>"
+		end
+	end
+	statusText = statusText .. "</div>"
+
+	statusText = statusText .. "</div>"
+	util.setLuupVariable(SID.SMART_SWITCH_CONTROLLER, "StatusText", statusText, smartSwitchId)
+end
+
 -- Set light level on target switch
 local function setSwitchLevel(switchId, level)
   log.infoValues ("Setting Switch Level", "switchId", switchId, "level", level)
@@ -154,6 +214,8 @@ local function turnOffSwitch(smartSwitchId)
   setSwitchLevel(switchId, util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "OffLevel", smartSwitchId, util.T_NUMBER))
   util.setLuupVariable(SID.SMART_SWITCH_CONTROLLER, "Mode", MODE.OFF, smartSwitchId)
   util.setLuupVariable(SID.SMART_SWITCH_CONTROLLER, "Timeout", FAR_FUTURE_TIME, smartSwitchId)
+  
+  showStatusOnUI(smartSwitchId)
 end
 
 
@@ -169,6 +231,8 @@ local function updateSwitchLevel(smartSwitchId)
   elseif (currentMode == MODE.OFF) then
     setSwitchLevel(switchId, util.getLuupVariable(SID.SMART_SWITCH_CONTROLLER, "OffLevel", smartSwitchId, util.T_NUMBER))
   end
+  
+  showStatusOnUI(smartSwitchId)
 end
 
 ----------------------------------------------
@@ -344,6 +408,8 @@ local function updateSwitchTimeout(switchId)
       scheduleNextWakeup (newTimeout)
     end
   end
+  
+  showStatusOnUI(smartSwitchId)
 end
 
 -- This is the luup.call_delay callback function that is scheduled
@@ -535,6 +601,7 @@ local function sensorTripped(sensorId)
     util.setLuupVariable(
       SID.SMART_SWITCH_CONTROLLER, "Timeout", FAR_FUTURE_TIME, smartSwitchId)
 
+    showStatusOnUI(smartSwitchId)
   end
 end
 
@@ -679,7 +746,9 @@ local function initSmartSwitch(smartSwitchId)
   g_smartSwitches[smartSwitchId] = { ["switchId"] = switchId }
 
   -- Clear out old "StatusText" variable
-  util.setLuupVariable(SID.SMART_SWITCH_CONTROLLER, "StatusText", "", smartSwitchId)
+  --util.setLuupVariable(SID.SMART_SWITCH_CONTROLLER, "StatusText", "", smartSwitchId)
+  
+  showStatusOnUI(smartSwitchId)
 end
 
 local function initSmartSwitches()
@@ -778,4 +847,4 @@ return {
   switchCallback=switchCallback,
   setLogConfig=setLogConfig
 }
-		
+
